@@ -52,7 +52,7 @@ app.post('/sendrequest', async (req, res) => {
 	const receiver = await  User.findOne({receiverId})
 	if(!receiver){
 		return res.status(404).json({message:'Receiver not found'})
-	}
+	}   
 	receiver.request.push({form:senderId,message})
 	await receiver.save()
 
