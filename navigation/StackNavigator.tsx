@@ -19,8 +19,8 @@ export default function StackNavigator() {
       <Tabs.Navigator>          
         <Tabs.Screen
           name="Chat"
-          component={ChatScreen}   
-          options={{
+          component={ChatScreen}     
+          options={{    
             tabBarStyle: {backgroundColor: '#101010'},
             headerShown: false,
             tabBarIcon: ({focused}) => {
