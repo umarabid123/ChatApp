@@ -16,7 +16,7 @@ export default function StackNavigator() {
 
   function BottomTabs() {
     return (
-      <Tabs.Navigator>
+      <Tabs.Navigator>     
         <Tabs.Screen
           name="Chat"
           component={ChatScreen}
