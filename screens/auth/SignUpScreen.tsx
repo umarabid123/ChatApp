@@ -1,33 +1,66 @@
-import {KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
 import AppText from '../../components/AppText/AppText';
 import CustomTextInput from '../../components/textInput/TextInput';
 import {Colors} from '../../constent/theme';
 import AppButton from '../../components/AppButton/AppButton';
+import axios from 'axios';
 
 const SignUpScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [image, setImage] = useState('');
+
+  const handleRegister = () => {
+    console.log('register');
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+      image: image,
+    };
+    axios
+      .post(
+        Platform.OS === 'ios'
+          ? 'http://127.0.0.1:8000/register'
+          : 'http://10.0.2.2:8000/register',
+        user,
+      )
+      .then((response: any) => {
+        console.log('register response', response);
+        setName('');
+        setEmail('');
+        setPassword('');
+        setImage('');
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
         <KeyboardAvoidingView>
           <View style={{marginTop: 100}}>
             <AppText
-              text="Sign Up"
-              color={Colors.primary}
-              fontSize={17}
-              fontWeight={600}
-              style={{textAlign: 'center'}}
-            />
-            <AppText
-              text="Create a new account"
-              fontSize={17}
+              text="Set up your account"
+              fontSize={20}
               fontWeight={600}
               style={{marginTop: 15, textAlign: 'center'}}
+            />
+            <AppText
+              text="Set up your account"
+              fontSize={14}
+              color="grey"
+              style={{textAlign: 'center'}}
             />
             <View style={{marginTop: 50}}>
               <CustomTextInput
@@ -63,7 +96,7 @@ const SignUpScreen = () => {
               <AppButton
                 text={'Sign Up'}
                 style={{borderRadius: 6, marginTop: 30}}
-                // onPress={handleRegister}
+                onPress={handleRegister}
               />
               <View
                 style={{

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   View,
@@ -10,6 +12,8 @@ import AppText from '../../components/AppText/AppText';
 import CustomTextInput from '../../components/textInput/TextInput';
 import {Colors} from '../../constent/theme';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const LoginScreen = () => {
 
@@ -17,7 +21,45 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
+  const checkLoginStatus = async () => {
+    		try{
+    			const token = await AsyncStorage.getItem("authToken");
+    		if (token) {
+    			navigation.navigate("Home");
+    		} else {
+    			Alert.alert("Your Email Or Password is incorrect");
+    		}
+    		}catch(error){
+    			console.log("Error", error)
+    		}
+    	};
+    	useEffect(() => {
+    		checkLoginStatus()
+    	}, []);
+    
+    	const handleLogin = () => {
+    		const user = {
+    			email: email,
+    			password: password,
+    		};
+    		axios
+    			.post(
+    				Platform.OS === "ios"
+    					? "http://127.0.0.1:8000/login"
+    					: "http://10.0.2.2:8000/login",
+    				user
+    			)
+    			.then((res) => {
+    				console.log("res:", res);
+    				const token = res.data.token;
+    				AsyncStorage.setItem("authToken", token);
+    				navigation.replace("ChatScreen");
+            Alert.alert("Login Successfully");
+    			})
+    			.catch((error) => {
+    				Alert.alert("Error Something went wrong in login",error);
+    			});
+    	};
   return (
     <SafeAreaView
       style={{
@@ -55,7 +97,7 @@ const LoginScreen = () => {
             <AppButton
               text={'Login'}
               style={{borderRadius: 6, marginTop: 30}}
-              // onPress={handleLogin}
+              onPress={handleLogin}
             />
             <View
               style={{
