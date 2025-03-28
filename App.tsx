@@ -6,12 +6,14 @@
  */
 
 import React from 'react';
-import {Text, View} from 'react-native';
+import { AuthProvider } from './contexts/AuthContext';
 import StackNavigator from './navigation/StackNavigator';
 
 function App(): React.JSX.Element {
   return (
-    <StackNavigator />
+   <AuthProvider>
+     <StackNavigator />
+   </AuthProvider>
   );
 }
 export default App;

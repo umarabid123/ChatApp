@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useContext } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -9,10 +9,12 @@ import SignUpScreen from '../screens/auth/SignUpScreen';
 import ChatScreen from '../screens/ChatScreen';
 import PeopleScreen from '../screens/PeopleScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function StackNavigator() {
   const Stack = createNativeStackNavigator();
   const Tabs = createBottomTabNavigator();
+  const {token,setToken}:any = useContext(AuthContext)
 
   function BottomTabs() {
     return (
@@ -88,7 +90,7 @@ export default function StackNavigator() {
   }
   return (
     <NavigationContainer>
-        <AuthStack />
-    </NavigationContainer>
+       {token === null || token ==='' ? <AuthStack /> : <MainStack />}
+    </NavigationContainer> 
   );
 }

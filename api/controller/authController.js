@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const registrationController = async (req, res) => {
 	try {
 		console.log("Received request at /register"); // Debugging
@@ -27,40 +28,34 @@ const registrationController = async (req, res) => {
 
 // create token function
 
-const createToken = (userId) => {
-	const payload = { userId: userId };
+// const createToken = (userId) => {
+// 	const payload = { userId: userId };
 
-	const token = jwt.sign(payload,"abcd3#dsj$`",{expiresIn:"1h"})
-	return token
-};
+// 	const token = jwt.sign(payload,"abcd3#dsj$`",{expiresIn:"1h"})
+// 	return token
+// };
 
-const loginController = async (req, res) => {
-	const { email, password } = req.body;
-	if (!email || !password) {
-		return res
-			.status(404)
-			.json({ massage: "Email and Password is required" });
+const loginController =async (req, res) => {
+	try {
+	  const { email, password } = req.body;
+  
+	  const user = await User.findOne({ email });
+	  if (!user) {
+		return res.status(401).json({ message: "Invalid email" });
+	  }
+  
+	  if (user.password !== password) {
+		return res.status(401).json({ message: "Invalid password" });
+	  }
+
+	  const secretKey = crypto.randomBytes(32).toString('hex');; // ✅ Use a fixed secret key
+	  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: "1h" });
+
+	  res.status(200).json({ token });
+	} catch (error) {
+	  console.log("Error logging in:", error);
+	  res.status(500).json({ message: "Error logging in" });
 	}
-	User.findOne({ email }).then((user) => {
-		if (!user) {
-			return res.status(404).json({ massage: "User not Found" });
-		}
-		if (user.password !== password) {
-			return res.status(404).json({
-				massage: "Enter Correct Password",
-			});
-		}
-		const token = createToken(user._id);
-		res.status(200)
-			.json({ token })
-			.catch((error) => {
-				console.log(
-					"Error something went wrong in finding user:",
-					error
-				);
-				res.status(500).json({ massage: "Internal Server error" });
-			});
-	});
 };
 
 module.exports = { registrationController, loginController };
