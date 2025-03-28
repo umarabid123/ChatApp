@@ -1,17 +1,85 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import AppButton from '../../components/AppButton/AppButton';
+import AppText from '../../components/AppText/AppText';
+import CustomTextInput from '../../components/textInput/TextInput';
+import {Colors} from '../../constent/theme';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
+
+  const navigation:any = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+
   return (
-    <View>
-      <Text>LoginScreen</Text>
-    </View>
-  )
-}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+      }}>
+      <View style={{padding: 10, alignItems: 'center'}}>
+        <KeyboardAvoidingView>
+          <AppText
+            text="Login to your account"
+            fontSize={20}
+            fontWeight={600}
+            style={{textAlign: 'center'}}
+          />
 
-export default LoginScreen
+          <View style={{marginTop: 30}}>
+            <CustomTextInput
+              placeholder="Enter your email"
+              labelText="Email"
+              style={{marginVertical: 10, width: 300}}
+              onChangeText={setEmail}
+              value={email}
+              keyboardType={'email-address'}
+            />
+            <CustomTextInput
+              placeholder="Enter your Password"
+              labelText="Password"
+              style={{marginVertical: 10, width: 300}}
+              onChangeText={setPassword}
+              value={password}
+              secureTextEntry={true}
+            />
+            <AppButton
+              text={'Login'}
+              style={{borderRadius: 6, marginTop: 30}}
+              // onPress={handleLogin}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 8,
+              }}>
+              <AppText text={"Don't have any account?"} color="grey" />
+              <AppText
+                text={'Sign Up'}
+                color={Colors.primary}
+                onPress={() => navigation.navigate("signup")}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-const styles = StyleSheet.create({})
+export default LoginScreen;
+
+const styles = StyleSheet.create({});
 // import {
 // 	View,
 // 	Text,

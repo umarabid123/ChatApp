@@ -1,8 +1,9 @@
 
 import React from "react";
 import { Pressable } from "react-native";
-import AppText from "../appText/AppText";
+
 import { Colors } from "../../constent/theme";
+import AppText from "../AppText/AppText";
 
 export default function AppButton({
 	text,

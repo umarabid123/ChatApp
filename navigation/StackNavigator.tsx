@@ -88,7 +88,7 @@ export default function StackNavigator() {
   }
   return (
     <NavigationContainer>
-        <MainStack />
+        <AuthStack />
     </NavigationContainer>
   );
 }
