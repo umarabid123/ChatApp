@@ -54,7 +54,7 @@ if(token){
         const token = res.data.token;   
         AsyncStorage.setItem('authToken', token);
         setToken(token);
-        Alert.alert('Login Successfully');    
+        Alert.alert('Login Successfully');        
       })
       .catch(error => {
         Alert.alert('Error Something went wrong in login', error);
