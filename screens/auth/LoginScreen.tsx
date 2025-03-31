@@ -31,7 +31,7 @@ const LoginScreen = () => {
   //       Alert.alert('Your Email Or Password is incorrect');
   //     }
   //   } catch (error) {
-  //     console.log('Error', eror);
+  //     console.log('Error', error);
   //   }
   // };
   useEffect(() => {
