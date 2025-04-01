@@ -50,8 +50,7 @@ if(token){
         user,
       )
       .then(res => {
-        console.log('res:', res);
-        const token = res.data.token;
+        const token = res.data.token;   
         AsyncStorage.setItem('authToken', token);
         setToken(token);
         Alert.alert('Login Successfully');
