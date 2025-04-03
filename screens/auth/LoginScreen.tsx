@@ -1,44 +1,25 @@
-import React, {useContext, useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   StyleSheet,
-  View,
+  View
 } from 'react-native';
 import AppButton from '../../components/AppButton/AppButton';
 import AppText from '../../components/AppText/AppText';
 import CustomTextInput from '../../components/textInput/TextInput';
-import {Colors} from '../../constent/theme';
-import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import {AuthContext} from '../../contexts/AuthContext';
+import { Colors } from '../../constent/theme';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const LoginScreen = () => {
   const navigation: any = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {token, setToken}: any = useContext(AuthContext);
-
-  // const checkLoginStatus = async () => {
-  //   try {
-  //     const token = await AsyncStorage.getItem('authToken');
-  //     if (token) {
-  //       navigation.navigate('MainStack', {screen: 'Main'});
-  //     } else {
-  //       Alert.alert('Your Email Or Password is incorrect');
-  //     }
-  //   } catch (error) {
-  //     console.log('Error', error);
-  //   }
-  // };
-  useEffect(() => {
-if(token){
-  navigation.replace('MainStack',{screen:'ChatScreen'})
-}
-  }, [token,navigation]);
+  const { token, setToken }: any = useContext(AuthContext);
 
   const handleLogin = () => {
     const user = {
@@ -49,15 +30,15 @@ if(token){
       .post('http://10.0.2.2:8000/login',
         user,
       )
-      .then(res => {
-        console.log('resp:', res);  
-        const token = res.data.token;   
+      .then(({ data }) => {
+
+        const token = data.token;
         AsyncStorage.setItem('authToken', token);
         setToken(token);
-        Alert.alert('Login Successfully');        
+        Alert.alert('Login Successfully');
       })
       .catch(error => {
-        Alert.alert('Error Something went wrong in login', error);
+        Alert.alert('Error Something went wrong in login', error.message);
       });
   };
   return (
@@ -68,20 +49,20 @@ if(token){
         justifyContent: 'center',
         backgroundColor: 'white',
       }}>
-      <View style={{padding: 10, alignItems: 'center'}}>
+      <View style={{ padding: 10, alignItems: 'center' }}>
         <KeyboardAvoidingView>
           <AppText
             text="Login to your account"
             fontSize={20}
             fontWeight={600}
-            style={{textAlign: 'center'}}
+            style={{ textAlign: 'center' }}
           />
 
-          <View style={{marginTop: 30}}>
+          <View style={{ marginTop: 30 }}>
             <CustomTextInput
               placeholder="Enter your email"
               labelText="Email"
-              style={{marginVertical: 10, width: 300}}
+              style={{ marginVertical: 10, width: 300 }}
               onChangeText={setEmail}
               value={email}
               keyboardType={'email-address'}
@@ -89,14 +70,14 @@ if(token){
             <CustomTextInput
               placeholder="Enter your Password"
               labelText="Password"
-              style={{marginVertical: 10, width: 300}}
+              style={{ marginVertical: 10, width: 300 }}
               onChangeText={setPassword}
               value={password}
               secureTextEntry={true}
             />
             <AppButton
               text={'Login'}
-              style={{borderRadius: 6, marginTop: 30}}
+              style={{ borderRadius: 6, marginTop: 30 }}
               onPress={handleLogin}
             />
             <View
